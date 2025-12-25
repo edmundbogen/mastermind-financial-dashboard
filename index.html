@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REIGNation Mastermind - Financial Dashboard</title>
+    <title>Edmund's Mastermind - Financial Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -347,6 +347,220 @@
             line-height: 1.5;
         }
 
+        /* Subscriber Sections */
+        .subscribers-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .subscribers-section h3 {
+            color: var(--navy);
+            font-weight: 400;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .subscribers-section h3 span {
+            font-size: 0.7em;
+            color: #666;
+            font-weight: normal;
+        }
+
+        .subscriber-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 15px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .subscriber-card {
+            background: var(--light-bg);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--green);
+            transition: transform 0.2s ease;
+        }
+
+        .subscriber-card:hover {
+            transform: translateX(5px);
+        }
+
+        .subscriber-card.high-value {
+            border-left-color: var(--gold);
+            background: linear-gradient(90deg, rgba(201, 162, 39, 0.1), var(--light-bg));
+        }
+
+        .subscriber-info h4 {
+            color: var(--navy);
+            font-size: 1em;
+            margin-bottom: 5px;
+        }
+
+        .subscriber-info .email {
+            color: #666;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+
+        .subscriber-info .tenure {
+            font-size: 0.8em;
+            color: var(--cyan);
+        }
+
+        .subscriber-amount {
+            text-align: right;
+        }
+
+        .subscriber-amount .monthly {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: var(--green);
+        }
+
+        .subscriber-amount .monthly.high-value {
+            color: var(--gold);
+        }
+
+        .subscriber-amount .label {
+            font-size: 0.75em;
+            color: #999;
+        }
+
+        /* Failed Payments Alert */
+        .failed-payments-section {
+            background: linear-gradient(135deg, #fff5f5, white);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            border-left: 5px solid var(--red);
+        }
+
+        .failed-payments-section h3 {
+            color: var(--red);
+            font-weight: 500;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .failed-payment-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(220, 53, 69, 0.2);
+        }
+
+        .failed-payment-item .details h4 {
+            color: var(--navy);
+            margin-bottom: 3px;
+        }
+
+        .failed-payment-item .details .reason {
+            color: var(--red);
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .failed-payment-item .details .email {
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        .failed-payment-item .amount {
+            color: var(--red);
+            font-weight: 600;
+            font-size: 1.2em;
+        }
+
+        /* Stats Cards for Subscribers */
+        .subscriber-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--light-bg);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 2em;
+            font-weight: 300;
+            color: var(--navy);
+        }
+
+        .stat-card .label {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .stat-card.mrr .number { color: var(--green); }
+        .stat-card.churn .number { color: var(--red); }
+        .stat-card.active .number { color: var(--cyan); }
+
+        /* Canceled Subscribers */
+        .canceled-section {
+            background: linear-gradient(135deg, #fff8e6, white);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            border-left: 5px solid #ffc107;
+        }
+
+        .canceled-section h3 {
+            color: #856404;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .canceled-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .canceled-item {
+            background: white;
+            border-radius: 8px;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .canceled-item .name {
+            color: var(--navy);
+            font-weight: 500;
+        }
+
+        .canceled-item .lost-amount {
+            color: #856404;
+            font-weight: 600;
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.8em;
@@ -363,12 +577,16 @@
             .pnl-table {
                 font-size: 0.9em;
             }
+
+            .subscriber-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>REIGN<span>ation</span> MASTERMIND</h1>
+        <h1>EDMUND'S <span>MASTERMIND</span></h1>
         <div class="subtitle">Financial Dashboard</div>
         <div class="date" id="currentDate">December 2025</div>
     </div>
@@ -377,7 +595,7 @@
         <!-- Data Entry Note -->
         <div class="data-note">
             <div class="icon">📊</div>
-            <p><strong>Chase Bank Account Data Loaded.</strong> 2025 YTD transactions from Chase ending in 1805. Credit card data to be added separately.</p>
+            <p><strong>Full Financial Data Loaded.</strong> Chase Bank 2025 YTD + Both Stripe Accounts (REIGNation & Edmund Bogen Coaching). Subscriber tracking, failed payments, and churn analysis included.</p>
         </div>
 
         <!-- Summary Cards -->
@@ -415,6 +633,61 @@
             </div>
         </div>
 
+        <!-- Stripe Subscriber Stats -->
+        <div class="subscribers-section">
+            <h3>Stripe Subscriber Overview <span>- Both Accounts Combined</span></h3>
+            <div class="subscriber-stats">
+                <div class="stat-card mrr">
+                    <div class="number" id="totalMRR">$0</div>
+                    <div class="label">Monthly Recurring Revenue</div>
+                </div>
+                <div class="stat-card active">
+                    <div class="number" id="activeSubscribers">0</div>
+                    <div class="label">Active Subscribers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="avgSubscription">$0</div>
+                    <div class="label">Avg Subscription</div>
+                </div>
+                <div class="stat-card churn">
+                    <div class="number" id="failedPayments">0</div>
+                    <div class="label">Failed Payments (Recent)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Failed Payments Alert -->
+        <div class="failed-payments-section" id="failedPaymentsSection">
+            <h3>⚠️ Failed Payments - Action Required</h3>
+            <div id="failedPaymentsList">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Active REIGNation Subscribers -->
+        <div class="subscribers-section">
+            <h3>REIGNation Subscribers <span>- Active Members</span></h3>
+            <div class="subscriber-grid" id="reignationSubscribers">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Active Edmund Bogen Coaching Subscribers -->
+        <div class="subscribers-section">
+            <h3>Edmund Bogen Coaching Subscribers <span>- Active Members</span></h3>
+            <div class="subscriber-grid" id="coachingSubscribers">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Recently Canceled -->
+        <div class="canceled-section">
+            <h3>⚡ Recently Canceled Subscriptions</h3>
+            <div class="canceled-list" id="canceledList">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
         <!-- P&L Statement -->
         <div class="pnl-section">
             <h3>Profit & Loss Statement - 2025</h3>
@@ -441,7 +714,7 @@
     </div>
 
     <div class="footer">
-        <p>REIGNation Mastermind Financial Dashboard | Edmund Bogen</p>
+        <p>Edmund's Mastermind Financial Dashboard</p>
         <p><a href="mailto:edmund@bogenhomes.com">edmund@bogenhomes.com</a> | 561-235-7575</p>
     </div>
 
@@ -666,6 +939,84 @@
         };
 
         // ============================================================
+        // STRIPE SUBSCRIBER DATA - Both Accounts
+        // ============================================================
+
+        const stripeData = {
+            // REIGNation Active Subscribers (from unified_payments copy.csv)
+            reignationSubscribers: [
+                { name: 'Jonathan Migdol', email: 'jonathan.migdol@gibsonsir.com', amount: 10, firstPayment: '2025-09-23', status: 'active' },
+                { name: 'Mandy Bohlman', email: 'mandy.bohlman@elliman.com', amount: 30, firstPayment: '2024-06-19', status: 'active' },
+                { name: 'Lavette', email: 'lavettebell757@gmail.com', amount: 10, firstPayment: '2024-12-18', status: 'active' },
+                { name: 'evangela brock', email: 'evangela.brock@elliman.com', amount: 10, firstPayment: '2025-02-12', status: 'active' },
+                { name: 'Hassan Bazzi', email: 'hassan.bazzi2020@gmail.com', amount: 30, firstPayment: '2025-01-10', status: 'active' },
+                { name: 'Jamie Bridges', email: 'jamieb@kw.com', amount: 30, firstPayment: '2024-04-10', status: 'active' },
+                { name: 'Sandy Schwartz', email: 'sschwartz@onesothebysrealty.com', amount: 30, firstPayment: '2025-02-09', status: 'active' },
+                { name: 'carla dicenzo-flynn', email: 'jgraham@jgrahamrealty.com', amount: 30, firstPayment: '2024-05-07', status: 'active' },
+                { name: 'Ken Mandich', email: 'kenmandich@gmail.com', amount: 30, firstPayment: '2024-10-06', status: 'active' },
+                { name: 'suzanne damon', email: 'suzanne@damonteam.com', amount: 30, firstPayment: '2025-09-05', status: 'active' },
+                { name: 'Tiffany Hill Goad', email: 'tiffanyhillgoad@gmail.com', amount: 30, firstPayment: '2025-10-02', status: 'active' },
+                { name: 'Peggy Lotz', email: 'lotzrealestate@gmail.com', amount: 30, firstPayment: '2025-10-01', status: 'active' },
+                { name: 'Deborah Burlingame', email: 'deborah.burlingame@elliman.com', amount: 10, firstPayment: '2024-04-01', status: 'active' },
+                { name: 'Luis Hoffmann', email: 'luis@luishoffmann.com', amount: 30, firstPayment: '2024-12-04', status: 'active' },
+                { name: 'Robert Lee', email: 'robert@lesix.agency', amount: 30, firstPayment: '2025-03-19', status: 'active' }
+            ],
+
+            // Edmund Bogen Coaching Active Subscribers (from unified_payments.csv)
+            coachingSubscribers: [
+                { name: 'Brenda Wolfe', email: 'brendawolfehomes@gmail.com', amount: 10, firstPayment: '2023-05-17', status: 'active' },
+                { name: 'Hedika Azizi', email: 'hedika.azizi@elliman.com', amount: 10, firstPayment: '2023-05-24', status: 'active' },
+                { name: 'Denine Kerns', email: 'denine.kerns@elliman.com', amount: 10, firstPayment: '2023-05-24', status: 'active' },
+                { name: 'Karina Pacific', email: 'karina@karinapacific.com', amount: 10, firstPayment: '2023-06-19', status: 'active' },
+                { name: 'Ashley Novak', email: 'ashley.novak@compass.com', amount: 10, firstPayment: '2023-08-18', status: 'active' },
+                { name: 'Tzoli SM', email: 'tzolism@gmail.com', amount: 10, firstPayment: '2023-07-14', status: 'active' },
+                { name: 'M Scotch', email: 'mscotch_psyc@hotmail.com', amount: 10, firstPayment: '2023-11-13', status: 'active' },
+                { name: 'Terry Robison', email: 'terryrobison1@gmail.com', amount: 10, firstPayment: '2023-07-13', status: 'active' },
+                { name: 'Paul F', email: 'paulf@kw.com', amount: 10, firstPayment: '2023-06-12', status: 'active' },
+                { name: 'Tami Lawlor', email: 'tamilawlor@me.com', amount: 10, firstPayment: '2023-09-08', status: 'active' },
+                { name: 'Kenny Bellini', email: 'kenny@kennybellini.com', amount: 10, firstPayment: '2024-05-04', status: 'active' },
+                { name: 'Marlene de Cespedes', email: 'marlene@marlenedecespedes.com', amount: 10, firstPayment: '2023-09-03', status: 'active' },
+                { name: 'Karen Legum', email: 'karen.legum@lnf.com', amount: 10, firstPayment: '2023-07-02', status: 'active' },
+                { name: 'Lisa', email: 'lisa@myhasslefreelistings.com', amount: 10, firstPayment: '2023-09-01', status: 'active' },
+                { name: 'Linda Moreau', email: 'linda.moreau@beangroup.com', amount: 10, firstPayment: '2023-06-30', status: 'active' },
+                { name: 'Andrew Fishkind', email: 'fishkind.andrew@gmail.com', amount: 10, firstPayment: '2023-08-30', status: 'active' },
+                { name: 'Bill Naples', email: 'bill@naplesflre.com', amount: 30, firstPayment: '2024-02-29', status: 'active' },
+                { name: 'Leslie Charlotte', email: 'leslie@lesliesellscharlotte.com', amount: 10, firstPayment: '2024-03-29', status: 'active' },
+                { name: 'J DiCristo', email: 'jdicristo@ivesterjackson.com', amount: 30, firstPayment: '2024-04-26', status: 'active' },
+                { name: 'Andy Maxim', email: 'andy@maximrealtors.com', amount: 10, firstPayment: '2023-05-24', status: 'active' },
+                { name: 'Highland Company RE', email: 'accounts@thehighlandcompanyre.com', amount: 30, firstPayment: '2025-01-04', status: 'active' },
+                { name: 'Maria Seremetis', email: 'maria.seremetis@elliman.com', amount: 10, firstPayment: '2025-01-14', status: 'active' }
+            ],
+
+            // Failed Payments (Recent - Both Accounts)
+            failedPayments: [
+                { name: 'Robert Lee', email: 'robert@lesix.agency', amount: 30, reason: 'stolen_card', date: '2025-12-19', account: 'REIGNation' },
+                { name: 'Brenda Wolfe', email: 'brendawolfehomes@gmail.com', amount: 10, reason: 'do_not_honor', date: '2025-12-17', account: 'Coaching' },
+                { name: 'Tiffany Hill Goad', email: 'tiffanyhillgoad@gmail.com', amount: 30, reason: 'insufficient_funds', date: '2025-12-02', account: 'REIGNation' },
+                { name: 'Hassan Bazzi', email: 'hassan.bazzi2020@gmail.com', amount: 30, reason: 'insufficient_funds', date: '2025-10-10', account: 'REIGNation' },
+                { name: 'Bill Naples', email: 'bill@naplesflre.com', amount: 30, reason: 'partner_insufficient_funds', date: '2025-10-29', account: 'Coaching' },
+                { name: 'Wendy Lynn Borroto', email: 'borroto.wendy@gmail.com', amount: 30, reason: 'do_not_honor', date: '2025-01-20', account: 'REIGNation' },
+                { name: 'Andy Maxim', email: 'andy@maximrealtors.com', amount: 10, reason: 'generic_decline', date: '2025-07-05', account: 'Coaching' },
+                { name: 'Alex Parker', email: 'Alex.Parker@Elliman.com', amount: 10, reason: 'expired_card', date: '2025-01-22', account: 'Coaching' },
+                { name: 'Lindsey Fenton', email: 'lindsey.fenton@elliman.com', amount: 10, reason: 'generic_decline', date: '2025-01-24', account: 'Coaching' }
+            ],
+
+            // Recently Canceled Subscriptions (2025)
+            canceledSubscriptions: [
+                { name: 'Alicia Warburton', email: 'alicia.warburton@elliman.com', amount: 600, cancelDate: '2025-12-21', account: 'REIGNation' },
+                { name: 'Jason Dembeck', email: 'jdembeck@4saleindenver.com', amount: 30, cancelDate: '2025-12-21', account: 'REIGNation' },
+                { name: 'andrew cichon', email: 'andycichon@bdjrealestate.com', amount: 30, cancelDate: '2025-12-20', account: 'REIGNation' },
+                { name: 'Dana Ocampo', email: 'dana.oc@gmail.com', amount: 400, cancelDate: '2025-12-20', account: 'REIGNation' },
+                { name: 'Nicole Miller', email: 'nmillerproperties@gmail.com', amount: 10, cancelDate: '2025-12-06', account: 'REIGNation' },
+                { name: 'Stacy Meyrowitz', email: 'stacy.meyrowitz@elliman.com', amount: 10, cancelDate: '2025-12-01', account: 'REIGNation' },
+                { name: 'Paula Annarumma', email: 'paula@pcarealtyinc.com', amount: 30, cancelDate: '2025-11-29', account: 'REIGNation' },
+                { name: 'Deb Armstrong', email: 'darmstrong@suncadia.com', amount: 30, cancelDate: '2025-11-29', account: 'REIGNation' },
+                { name: 'Greg Coggins', email: 'cogginshomes@gmail.com', amount: 30, cancelDate: '2025-11-27', account: 'REIGNation' },
+                { name: 'Mark Fuller', email: 'mark@markfullerrealestate.com', amount: 30, cancelDate: '2025-03-03', account: 'Coaching', note: 'Refunded' }
+            ]
+        };
+
+        // ============================================================
         // DASHBOARD LOGIC - Don't edit below unless customizing
         // ============================================================
 
@@ -871,6 +1222,157 @@
             container.innerHTML = html;
         }
 
+        // Calculate subscription tenure
+        function calculateTenure(firstPaymentDate) {
+            const start = new Date(firstPaymentDate);
+            const now = new Date();
+            const months = Math.floor((now - start) / (1000 * 60 * 60 * 24 * 30));
+            if (months < 1) return 'New subscriber';
+            if (months === 1) return '1 month';
+            if (months < 12) return `${months} months`;
+            const years = Math.floor(months / 12);
+            const remainingMonths = months % 12;
+            if (remainingMonths === 0) return years === 1 ? '1 year' : `${years} years`;
+            return years === 1 ? `1 year, ${remainingMonths} mo` : `${years} years, ${remainingMonths} mo`;
+        }
+
+        // Format decline reason
+        function formatDeclineReason(reason) {
+            const reasons = {
+                'stolen_card': 'Card Reported Stolen',
+                'do_not_honor': 'Card Declined (Do Not Honor)',
+                'insufficient_funds': 'Insufficient Funds',
+                'partner_insufficient_funds': 'Insufficient Funds',
+                'generic_decline': 'Card Declined',
+                'expired_card': 'Card Expired',
+                'invalid_cvc': 'Invalid CVC'
+            };
+            return reasons[reason] || reason;
+        }
+
+        // Update Stripe subscriber stats
+        function updateStripeStats() {
+            const allSubscribers = [...stripeData.reignationSubscribers, ...stripeData.coachingSubscribers];
+            const totalMRR = allSubscribers.reduce((sum, sub) => sum + sub.amount, 0);
+            const activeCount = allSubscribers.length;
+            const avgSubscription = activeCount > 0 ? totalMRR / activeCount : 0;
+            const recentFailures = stripeData.failedPayments.filter(fp => {
+                const failDate = new Date(fp.date);
+                const thirtyDaysAgo = new Date();
+                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 60);
+                return failDate > thirtyDaysAgo;
+            }).length;
+
+            document.getElementById('totalMRR').textContent = formatCurrency(totalMRR);
+            document.getElementById('activeSubscribers').textContent = activeCount;
+            document.getElementById('avgSubscription').textContent = formatCurrency(avgSubscription);
+            document.getElementById('failedPayments').textContent = recentFailures;
+        }
+
+        // Populate failed payments
+        function populateFailedPayments() {
+            const container = document.getElementById('failedPaymentsList');
+            const section = document.getElementById('failedPaymentsSection');
+
+            // Only show recent failures (last 60 days)
+            const recentFailures = stripeData.failedPayments.filter(fp => {
+                const failDate = new Date(fp.date);
+                const sixtyDaysAgo = new Date();
+                sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+                return failDate > sixtyDaysAgo;
+            });
+
+            if (recentFailures.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+
+            let html = '';
+            for (const fp of recentFailures) {
+                html += `
+                    <div class="failed-payment-item">
+                        <div class="details">
+                            <h4>${fp.name} <span style="font-weight: normal; color: #666; font-size: 0.85em;">(${fp.account})</span></h4>
+                            <div class="email">${fp.email}</div>
+                            <div class="reason">${formatDeclineReason(fp.reason)} - ${new Date(fp.date).toLocaleDateString()}</div>
+                        </div>
+                        <div class="amount">$${fp.amount}/mo</div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        // Populate REIGNation subscribers
+        function populateReignationSubscribers() {
+            const container = document.getElementById('reignationSubscribers');
+            const sorted = [...stripeData.reignationSubscribers].sort((a, b) => b.amount - a.amount);
+
+            let html = '';
+            for (const sub of sorted) {
+                const isHighValue = sub.amount >= 30;
+                html += `
+                    <div class="subscriber-card ${isHighValue ? 'high-value' : ''}">
+                        <div class="subscriber-info">
+                            <h4>${sub.name}</h4>
+                            <div class="email">${sub.email}</div>
+                            <div class="tenure">${calculateTenure(sub.firstPayment)}</div>
+                        </div>
+                        <div class="subscriber-amount">
+                            <div class="monthly ${isHighValue ? 'high-value' : ''}">$${sub.amount}</div>
+                            <div class="label">per month</div>
+                        </div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        // Populate Coaching subscribers
+        function populateCoachingSubscribers() {
+            const container = document.getElementById('coachingSubscribers');
+            const sorted = [...stripeData.coachingSubscribers].sort((a, b) => b.amount - a.amount);
+
+            let html = '';
+            for (const sub of sorted) {
+                const isHighValue = sub.amount >= 30;
+                html += `
+                    <div class="subscriber-card ${isHighValue ? 'high-value' : ''}">
+                        <div class="subscriber-info">
+                            <h4>${sub.name}</h4>
+                            <div class="email">${sub.email}</div>
+                            <div class="tenure">${calculateTenure(sub.firstPayment)}</div>
+                        </div>
+                        <div class="subscriber-amount">
+                            <div class="monthly ${isHighValue ? 'high-value' : ''}">$${sub.amount}</div>
+                            <div class="label">per month</div>
+                        </div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        // Populate canceled subscriptions
+        function populateCanceledSubscriptions() {
+            const container = document.getElementById('canceledList');
+            const sorted = [...stripeData.canceledSubscriptions].sort((a, b) => new Date(b.cancelDate) - new Date(a.cancelDate));
+
+            let html = '';
+            for (const sub of sorted) {
+                html += `
+                    <div class="canceled-item">
+                        <div>
+                            <span class="name">${sub.name}</span>
+                            <span style="font-size: 0.8em; color: #666;"> (${sub.account})</span>
+                        </div>
+                        <div class="lost-amount">-$${sub.amount}/mo</div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
             updateSummaryCards();
@@ -878,6 +1380,13 @@
             createExpenseChart();
             populatePnL();
             populateTransactions();
+
+            // Stripe subscriber functions
+            updateStripeStats();
+            populateFailedPayments();
+            populateReignationSubscribers();
+            populateCoachingSubscribers();
+            populateCanceledSubscriptions();
 
             // Set current date
             const now = new Date();
