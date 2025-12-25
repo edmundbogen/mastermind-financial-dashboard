@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REIGNation Mastermind - Financial Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --navy: #1a3e5c;
+            --cyan: #00a8e1;
+            --gold: #c9a227;
+            --green: #28a745;
+            --red: #dc3545;
+            --light-bg: #f8fbff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--navy) 0%, #0d2840 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--navy) 0%, #0d2840 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 4px solid var(--gold);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 span {
+            color: var(--gold);
+        }
+
+        .header .subtitle {
+            color: #b3d9ff;
+            font-size: 1.1em;
+        }
+
+        .header .date {
+            color: var(--cyan);
+            margin-top: 10px;
+            font-size: 0.95em;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Summary Cards */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card.revenue {
+            border-top: 5px solid var(--green);
+        }
+
+        .card.expenses {
+            border-top: 5px solid var(--red);
+        }
+
+        .card.profit {
+            border-top: 5px solid var(--gold);
+        }
+
+        .card.profit.negative {
+            border-top-color: var(--red);
+        }
+
+        .card .label {
+            font-size: 0.9em;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .card .value {
+            font-size: 2.5em;
+            font-weight: 300;
+            color: var(--navy);
+        }
+
+        .card.revenue .value { color: var(--green); }
+        .card.expenses .value { color: var(--red); }
+        .card.profit .value { color: var(--gold); }
+        .card.profit.negative .value { color: var(--red); }
+
+        .card .change {
+            font-size: 0.85em;
+            margin-top: 10px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .card .change.positive {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--green);
+        }
+
+        .card .change.negative {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--red);
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .chart-card h3 {
+            color: var(--navy);
+            font-weight: 400;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        /* P&L Table */
+        .pnl-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .pnl-section h3 {
+            color: var(--navy);
+            font-weight: 400;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .pnl-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .pnl-table th {
+            background: var(--navy);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .pnl-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .pnl-table tr:hover {
+            background: var(--light-bg);
+        }
+
+        .pnl-table .category {
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        .pnl-table .amount {
+            text-align: right;
+            font-family: 'Courier New', monospace;
+        }
+
+        .pnl-table .amount.positive { color: var(--green); }
+        .pnl-table .amount.negative { color: var(--red); }
+
+        .pnl-table .total-row {
+            background: var(--light-bg);
+            font-weight: 700;
+        }
+
+        .pnl-table .total-row td {
+            border-top: 3px solid var(--navy);
+        }
+
+        /* Transactions Section */
+        .transactions-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .transactions-section h3 {
+            color: var(--navy);
+            font-weight: 400;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .transaction-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s ease;
+        }
+
+        .transaction-item:hover {
+            background: var(--light-bg);
+        }
+
+        .transaction-item .details {
+            flex: 1;
+        }
+
+        .transaction-item .payee {
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 5px;
+        }
+
+        .transaction-item .meta {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .transaction-item .amount {
+            font-size: 1.2em;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        .transaction-item .amount.income { color: var(--green); }
+        .transaction-item .amount.expense { color: var(--red); }
+
+        .category-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            margin-left: 10px;
+            background: var(--light-bg);
+            color: var(--navy);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h4 {
+            color: var(--navy);
+            margin-bottom: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9em;
+        }
+
+        .footer a {
+            color: var(--cyan);
+            text-decoration: none;
+        }
+
+        /* Data Entry Note */
+        .data-note {
+            background: linear-gradient(135deg, var(--cyan), #0088cc);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .data-note .icon {
+            font-size: 2em;
+        }
+
+        .data-note p {
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .pnl-table {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>REIGN<span>ation</span> MASTERMIND</h1>
+        <div class="subtitle">Financial Dashboard</div>
+        <div class="date" id="currentDate">December 2025</div>
+    </div>
+
+    <div class="container">
+        <!-- Data Entry Note -->
+        <div class="data-note">
+            <div class="icon">📊</div>
+            <p><strong>Dashboard Ready for Data Entry.</strong> Bank account and credit card transactions can be added to the financialData object in this file. Categories include: Memberships, Advertising, Software, Events, Coaching, and more.</p>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="card revenue">
+                <div class="label">Total Revenue</div>
+                <div class="value" id="totalRevenue">$0</div>
+                <div class="change positive" id="revenueChange">YTD 2025</div>
+            </div>
+            <div class="card expenses">
+                <div class="label">Total Expenses</div>
+                <div class="value" id="totalExpenses">$0</div>
+                <div class="change negative" id="expenseChange">YTD 2025</div>
+            </div>
+            <div class="card profit" id="profitCard">
+                <div class="label">Net Profit/Loss</div>
+                <div class="value" id="netProfit">$0</div>
+                <div class="change" id="profitMargin">0% Margin</div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <h3>Monthly Revenue vs Expenses</h3>
+                <div class="chart-container">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3>Expense Breakdown by Category</h3>
+                <div class="chart-container">
+                    <canvas id="expenseBreakdown"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- P&L Statement -->
+        <div class="pnl-section">
+            <h3>Profit & Loss Statement - 2025</h3>
+            <table class="pnl-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th style="text-align: right;">Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="pnlBody">
+                    <!-- Populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="transactions-section">
+            <h3>Recent Transactions</h3>
+            <div class="transaction-list" id="transactionList">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>REIGNation Mastermind Financial Dashboard | Edmund Bogen</p>
+        <p><a href="mailto:edmund@bogenhomes.com">edmund@bogenhomes.com</a> | 561-235-7575</p>
+    </div>
+
+    <script>
+        // ============================================================
+        // FINANCIAL DATA - Edit this section to add your data
+        // ============================================================
+
+        const financialData = {
+            // Monthly data for charts
+            months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+
+            // Monthly revenue (add your actual numbers)
+            monthlyRevenue: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+
+            // Monthly expenses (add your actual numbers)
+            monthlyExpenses: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+
+            // Revenue categories
+            revenue: {
+                'Mastermind Memberships': 0,
+                'Coaching Sessions': 0,
+                'Event Tickets': 0,
+                'Sponsorships': 0,
+                'Affiliate Revenue': 0,
+                'Other Income': 0
+            },
+
+            // Expense categories
+            expenses: {
+                'Advertising & Marketing': 0,
+                'Software & Subscriptions': 0,
+                'Event Costs': 0,
+                'Contractor/VA Payments': 0,
+                'Travel & Entertainment': 0,
+                'Office & Equipment': 0,
+                'Professional Services': 0,
+                'Payment Processing Fees': 0,
+                'Other Expenses': 0
+            },
+
+            // Individual transactions (add bank/credit card transactions here)
+            transactions: [
+                // Example format:
+                // { date: '2025-12-20', payee: 'Zoom', amount: -15.99, category: 'Software & Subscriptions', type: 'expense' },
+                // { date: '2025-12-15', payee: 'Mastermind Member - John Doe', amount: 997, category: 'Mastermind Memberships', type: 'income' },
+            ]
+        };
+
+        // ============================================================
+        // DASHBOARD LOGIC - Don't edit below unless customizing
+        // ============================================================
+
+        // Format currency
+        function formatCurrency(amount) {
+            const absAmount = Math.abs(amount);
+            const formatted = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(absAmount);
+            return amount < 0 ? `-${formatted}` : formatted;
+        }
+
+        // Calculate totals
+        function calculateTotals() {
+            const totalRevenue = Object.values(financialData.revenue).reduce((a, b) => a + b, 0);
+            const totalExpenses = Object.values(financialData.expenses).reduce((a, b) => a + b, 0);
+            const netProfit = totalRevenue - totalExpenses;
+            const profitMargin = totalRevenue > 0 ? ((netProfit / totalRevenue) * 100).toFixed(1) : 0;
+
+            return { totalRevenue, totalExpenses, netProfit, profitMargin };
+        }
+
+        // Update summary cards
+        function updateSummaryCards() {
+            const { totalRevenue, totalExpenses, netProfit, profitMargin } = calculateTotals();
+
+            document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
+            document.getElementById('totalExpenses').textContent = formatCurrency(totalExpenses);
+            document.getElementById('netProfit').textContent = formatCurrency(netProfit);
+
+            const profitCard = document.getElementById('profitCard');
+            const profitMarginEl = document.getElementById('profitMargin');
+
+            if (netProfit < 0) {
+                profitCard.classList.add('negative');
+                profitMarginEl.className = 'change negative';
+            } else {
+                profitCard.classList.remove('negative');
+                profitMarginEl.className = 'change positive';
+            }
+            profitMarginEl.textContent = `${profitMargin}% Margin`;
+        }
+
+        // Create monthly chart
+        function createMonthlyChart() {
+            const ctx = document.getElementById('monthlyChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: financialData.months,
+                    datasets: [
+                        {
+                            label: 'Revenue',
+                            data: financialData.monthlyRevenue,
+                            backgroundColor: 'rgba(40, 167, 69, 0.8)',
+                            borderRadius: 5
+                        },
+                        {
+                            label: 'Expenses',
+                            data: financialData.monthlyExpenses,
+                            backgroundColor: 'rgba(220, 53, 69, 0.8)',
+                            borderRadius: 5
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: value => '$' + value.toLocaleString()
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Create expense breakdown chart
+        function createExpenseChart() {
+            const ctx = document.getElementById('expenseBreakdown').getContext('2d');
+            const expenseLabels = Object.keys(financialData.expenses);
+            const expenseValues = Object.values(financialData.expenses);
+
+            const colors = [
+                '#1a3e5c', '#00a8e1', '#c9a227', '#28a745', '#dc3545',
+                '#6f42c1', '#fd7e14', '#20c997', '#e83e8c'
+            ];
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: expenseLabels,
+                    datasets: [{
+                        data: expenseValues,
+                        backgroundColor: colors,
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                boxWidth: 12,
+                                padding: 15
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Populate P&L table
+        function populatePnL() {
+            const tbody = document.getElementById('pnlBody');
+            let html = '';
+
+            // Revenue section
+            html += '<tr><td colspan="2" style="background: rgba(40, 167, 69, 0.1); font-weight: 700; color: #28a745;">REVENUE</td></tr>';
+            for (const [category, amount] of Object.entries(financialData.revenue)) {
+                html += `<tr>
+                    <td class="category">${category}</td>
+                    <td class="amount positive">${formatCurrency(amount)}</td>
+                </tr>`;
+            }
+            const totalRevenue = Object.values(financialData.revenue).reduce((a, b) => a + b, 0);
+            html += `<tr class="total-row">
+                <td>Total Revenue</td>
+                <td class="amount positive">${formatCurrency(totalRevenue)}</td>
+            </tr>`;
+
+            // Expenses section
+            html += '<tr><td colspan="2" style="background: rgba(220, 53, 69, 0.1); font-weight: 700; color: #dc3545; margin-top: 20px;">EXPENSES</td></tr>';
+            for (const [category, amount] of Object.entries(financialData.expenses)) {
+                html += `<tr>
+                    <td class="category">${category}</td>
+                    <td class="amount negative">${formatCurrency(amount)}</td>
+                </tr>`;
+            }
+            const totalExpenses = Object.values(financialData.expenses).reduce((a, b) => a + b, 0);
+            html += `<tr class="total-row">
+                <td>Total Expenses</td>
+                <td class="amount negative">${formatCurrency(totalExpenses)}</td>
+            </tr>`;
+
+            // Net Profit
+            const netProfit = totalRevenue - totalExpenses;
+            html += `<tr style="background: linear-gradient(135deg, #1a3e5c, #0d2840);">
+                <td style="color: white; font-weight: 700; font-size: 1.1em;">NET PROFIT/LOSS</td>
+                <td class="amount" style="color: ${netProfit >= 0 ? '#c9a227' : '#dc3545'}; font-size: 1.2em; font-weight: 700;">${formatCurrency(netProfit)}</td>
+            </tr>`;
+
+            tbody.innerHTML = html;
+        }
+
+        // Populate transactions
+        function populateTransactions() {
+            const container = document.getElementById('transactionList');
+
+            if (financialData.transactions.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📝</div>
+                        <h4>No Transactions Yet</h4>
+                        <p>Add your bank and credit card transactions to the financialData.transactions array</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by date descending
+            const sorted = [...financialData.transactions].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            let html = '';
+            for (const tx of sorted) {
+                const amountClass = tx.type === 'income' ? 'income' : 'expense';
+                const amountDisplay = tx.type === 'income' ? `+${formatCurrency(tx.amount)}` : formatCurrency(tx.amount);
+
+                html += `
+                    <div class="transaction-item">
+                        <div class="details">
+                            <div class="payee">${tx.payee}<span class="category-tag">${tx.category}</span></div>
+                            <div class="meta">${new Date(tx.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+                        </div>
+                        <div class="amount ${amountClass}">${amountDisplay}</div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSummaryCards();
+            createMonthlyChart();
+            createExpenseChart();
+            populatePnL();
+            populateTransactions();
+
+            // Set current date
+            const now = new Date();
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        });
+    </script>
+</body>
+</html>
