@@ -9,7 +9,7 @@
         :root {
             --navy: #1a3e5c;
             --cyan: #00a8e1;
-            --gold: #c9a227;
+            --accent: #00a8e1;  /* Replaced gold with cyan */
             --green: #28a745;
             --red: #dc3545;
             --light-bg: #f8fbff;
@@ -33,7 +33,7 @@
             color: white;
             padding: 30px 20px;
             text-align: center;
-            border-bottom: 4px solid var(--gold);
+            border-bottom: 4px solid var(--accent);
         }
 
         .header h1 {
@@ -44,7 +44,7 @@
         }
 
         .header h1 span {
-            color: var(--gold);
+            color: var(--accent);
         }
 
         .header .subtitle {
@@ -94,7 +94,7 @@
         }
 
         .card.profit {
-            border-top: 5px solid var(--gold);
+            border-top: 5px solid var(--accent);
         }
 
         .card.profit.negative {
@@ -117,7 +117,7 @@
 
         .card.revenue .value { color: var(--green); }
         .card.expenses .value { color: var(--red); }
-        .card.profit .value { color: var(--gold); }
+        .card.profit .value { color: var(--accent); }
         .card.profit.negative .value { color: var(--red); }
 
         .card .change {
@@ -394,8 +394,8 @@
         }
 
         .subscriber-card.high-value {
-            border-left-color: var(--gold);
-            background: linear-gradient(90deg, rgba(201, 162, 39, 0.1), var(--light-bg));
+            border-left-color: var(--accent);
+            background: linear-gradient(90deg, rgba(0, 168, 225, 0.1), var(--light-bg));
         }
 
         .subscriber-info h4 {
@@ -426,7 +426,7 @@
         }
 
         .subscriber-amount .monthly.high-value {
-            color: var(--gold);
+            color: var(--accent);
         }
 
         .subscriber-amount .label {
@@ -1112,7 +1112,7 @@
             const expenseValues = Object.values(financialData.expenses);
 
             const colors = [
-                '#1a3e5c', '#00a8e1', '#c9a227', '#28a745', '#dc3545',
+                '#1a3e5c', '#00a8e1', '#17a2b8', '#28a745', '#dc3545',
                 '#6f42c1', '#fd7e14', '#20c997', '#e83e8c'
             ];
 
@@ -1180,7 +1180,7 @@
             const netProfit = totalRevenue - totalExpenses;
             html += `<tr style="background: linear-gradient(135deg, #1a3e5c, #0d2840);">
                 <td style="color: white; font-weight: 700; font-size: 1.1em;">NET PROFIT/LOSS</td>
-                <td class="amount" style="color: ${netProfit >= 0 ? '#c9a227' : '#dc3545'}; font-size: 1.2em; font-weight: 700;">${formatCurrency(netProfit)}</td>
+                <td class="amount" style="color: ${netProfit >= 0 ? '#00a8e1' : '#dc3545'}; font-size: 1.2em; font-weight: 700;">${formatCurrency(netProfit)}</td>
             </tr>`;
 
             tbody.innerHTML = html;
